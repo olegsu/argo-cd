@@ -1,10 +1,14 @@
-# Debugging Remote ArgoCD Environment
-In this article, we will describe how to debug a remote environment with [Telepresence](https://telepresence.io/).
-Telepresence allows to connect & debug a service deployed in a remote environment and to "cherry-pick" one service to run locally, staying connected to the remote cluster. This will:
+# Debugging a Remote ArgoCD Environment
+
+In this guide, we will describe how to debug a remote ArgoCD environment with [Telepresence](https://telepresence.io/).
+
+Telepresence allows you to connect & debug a service deployed in a remote environment and to "cherry-pick" one service to run locally, staying connected to the remote cluster. This will:
+
 * Reduce resource footprint on the local machine
-* Decrease feedback loop time
-* Gain more confidence about the delivered code.
-To read more about it, refer to the official documentation on [telepresence.io](https://telepresence.io/) or [Medium](https://medium.com/containers-101/development-environment-using-telepresence-634bd7210c26)
+* Decrease the feedback loop time
+* Result in more confidence about the delivered code.
+
+To read more about it, refer to the official documentation at [telepresence.io](https://telepresence.io/) or [Medium](https://medium.com/containers-101/development-environment-using-telepresence-634bd7210c26).
 
 ## Install ArgoCD
 First of all, install ArgoCD on your cluster
@@ -19,21 +23,21 @@ Connect to one of the services, for example, to debug the main ArgoCD server run
 telepresence --swap-deployment argocd-server --namespace argocd --env-file .envrc.remote --expose 8080:8080 --expose 8083:8083 --run bash
 ```
 * `--swap-deployment` changes the argocd-server deployment
-* `--expose` forward traffic comes to ports 8080 and 8083 to the same ports locally
-* `--env-file` write all the environment variables of the remote pod into a local file, the variables also set on the subprocess of the `--run` command
-* `--run` command to run once a connection established, use `bash`, `zsh` or others
-g
+* `--expose` forwards traffic of remote ports 8080 and 8083 to the same ports locally
+* `--env-file` writes all the environment variables of the remote pod into a local file, the variables are also set on the subprocess of the `--run` command
+* `--run` defines which command to run once a connection is established, use `bash`, `zsh` or others
+
 
 ## Debug
-Once a connection established, use favorite tools to start the server locally.
+Once a connection is established, use your favorite tools to start the server locally.
 
 ### Terminal
 * Compile `make server`
 * Run `./dist/argocd-server`
 
 ### VSCode
-In VSCode use the integrated terminal to run Telepresence command to connect. Then, to run argocd-server service use below configuration.
-Make sure to run `packr` before starting the debug to generate the assets. 
+In VSCode use the integrated terminal to run the Telepresence command to connect. Then, to run argocd-server service use the following configuration.
+Make sure to run `packr` before starting the debugging session to generate the assets. 
 Update the configuration file to point to kubeconfig file: `KUBECONFIG=` (required)
 ```json
         {
